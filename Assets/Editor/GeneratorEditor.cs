@@ -1,24 +1,22 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(LSystemTurtle))]
+[CustomEditor(typeof(LSystemGenerator))]
 public class GeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        LSystemTurtle lSystemTurtle = (LSystemTurtle)target;
+        LSystemGenerator generator = (LSystemGenerator)target;
         if (DrawDefaultInspector())
         {
-            if (lSystemTurtle.autoUpdate)
+            if (generator.autoUpdate)
             {
-                lSystemTurtle.angle = Random.Range(lSystemTurtle.minAngle, lSystemTurtle.maxAngle);
-                lSystemTurtle.Generate(clean: true);
+                generator.Generate(clean: true);
             }
         }
         if (GUILayout.Button("Generate"))
         {
-            lSystemTurtle.angle = Random.Range(lSystemTurtle.minAngle, lSystemTurtle.maxAngle);
-            lSystemTurtle.Generate(clean: true);
+            generator.Generate(clean: true);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -6,21 +7,17 @@ using UnityEngine;
 public class LSystem
 {
     [SerializeField]
-    private string sentence;
-    private string originalSentence;
+    public string sentence;
+    public string originalSentence;
 
     [SerializeField]
     private List<Rule> rules = new List<Rule>();
 
-    private int generations;
-    public int GenerationCount
-    {
-        get { return generations; }
-    }
     public int RuleCount
     {
         get { return rules.Count; }
     }
+
     public string GeneratedSentence
     {
         get { return sentence; }
@@ -37,25 +34,21 @@ public class LSystem
         sentence = originalSentence;
     }
 
-    public void Generate()
+    public void Generate(int generations)
     {
-        StringBuilder nextGen = new StringBuilder();
-        for (int i = 0; i < sentence.Length; i++)
+        var dict = rules.ToDictionary(x => x.ruleCharacter, x => x.ruleReplacement);
+
+        StringBuilder iteration = new StringBuilder();
+
+        for (int i = 0; i < generations; i++)
         {
-            char curr = sentence[i];
-            string replace = $"{curr}";
-            for (int j = 0; j < rules.Count; j++)
+            foreach (char c in sentence)
             {
-                char ruleCharacter = rules[j].ruleCharacter;
-                if (ruleCharacter == curr)
-                {
-                    replace = rules[j].ruleReplacement;
-                    break;
-                }
+                iteration.Append(dict.ContainsKey(c) ? dict[c] : c.ToString());
             }
-            nextGen.Append(replace);
+            sentence = iteration.ToString();
+            iteration = new StringBuilder();
         }
-        sentence = nextGen.ToString();
-        generations++;
+        Debug.Log(sentence);
     }
 }
