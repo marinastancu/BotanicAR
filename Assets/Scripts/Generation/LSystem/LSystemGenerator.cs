@@ -43,7 +43,7 @@ public class LSystemGenerator : MonoBehaviour
 
     [SerializeField]
     [Range(1, 5)]
-    private int numberOfGenerations = 3;
+    private int numberOfGenerations = 4;
 
     private Stack<LSystemTransform> stack = new Stack<LSystemTransform>();
     private Vector3 initialPosition = Vector3.zero;
@@ -108,14 +108,14 @@ public class LSystemGenerator : MonoBehaviour
     private void Line(int generation)
     {
         initialPosition = transform.position;
-        transform.Translate(Vector3.up * (length / 100));
+        transform.Translate(Vector3.up * (length / 500));
         GameObject line = Instantiate(branch);
         line.transform.parent = transform;
         line.name = $"Line_{currentLine}";
         line.GetComponent<LineRenderer>().SetPosition(0, initialPosition);
         line.GetComponent<LineRenderer>().SetPosition(1, transform.position);
-        line.GetComponent<LineRenderer>().startWidth = (width / 100) / (generation * 10);
-        line.GetComponent<LineRenderer>().endWidth = (width / 100) / (generation * 10);
+        line.GetComponent<LineRenderer>().startWidth = (width / 50) / (generation * 10);
+        line.GetComponent<LineRenderer>().endWidth = (width / 50) / (generation * 10);
         line.GetComponent<LineRenderer>().material = material;
         lines.Add(line);
         currentLine++;
