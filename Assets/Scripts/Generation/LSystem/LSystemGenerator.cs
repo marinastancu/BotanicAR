@@ -11,45 +11,59 @@ public class LSystemGenerator : MonoBehaviour
     [SerializeField]
     private Material material;
 
+    [SerializeField]
+    [Range(0, 20)]
+    private float seconds = 5.0f;
+
+    private float timer = 0;
+
     // Used for controlling the generation
     public bool autoUpdate;
 
     [Header("Randomization")]
     [SerializeField]
-    [Range(-80, 80)]
-    public float minAngle = -10;
-
-    [SerializeField]
-    [Range(-80, 80)]
-    public float maxAngle = 10;
+    [Range(-100, 100)]
+    public float variation = 50f;
 
     [Header("Generation")]
     [SerializeField]
     private LSystem lSystem;
 
     [SerializeField]
-    [Range(1, 100)]
-    private float length = 5.0f;
+    [Range(1, 5)]
+    private float length = 1f;
 
     [SerializeField]
-    [Range(1, 100)]
-    private float width = 5.0f;
+    [Range(1, 50)]
+    private float width = 1f;
 
     [SerializeField]
-    [Range(-100, 100)]
-    public float angle = 10;
+    [Range(-60, 60)]
+    public float angle = 10f;
 
     [SerializeField]
     [Range(1, 5)]
-    private int numberOfGenerations = 1;
+    private int numberOfGenerations = 3;
 
-    private LSystemTransform point = new LSystemTransform();
     private Stack<LSystemTransform> stack = new Stack<LSystemTransform>();
     private Vector3 initialPosition = Vector3.zero;
     private int currentLine = 0;
     private List<GameObject> lines = new List<GameObject>();
 
-    private void Start() { }
+    private void Start()
+    {
+        Generate(clean: false);
+    }
+
+    private void Update()
+    {
+        if (timer >= seconds)
+        {
+            Generate(clean: true);
+            timer = 0;
+        }
+        timer += Time.deltaTime * 1.0f;
+    }
 
     private void CleanExistingSystem()
     {
@@ -78,27 +92,36 @@ public class LSystemGenerator : MonoBehaviour
             Debug.LogError("You must have at least one rule defined");
             enabled = false;
         }
-        lSystem.Generate(numberOfGenerations);
-        DrawLines();
+
+        variation = Random.Range(-100, 100);
+        length = Random.Range(1, 5);
+        width = Random.Range(1, 5);
+        angle = Random.Range(-60, 60);
+
+        for (int i = 0; i < numberOfGenerations; i++)
+        {
+            lSystem.Generate();
+            DrawLines(i + 1);
+        }
     }
 
-    private void Line()
+    private void Line(int generation)
     {
         initialPosition = transform.position;
-        transform.Translate(Vector3.up * length);
+        transform.Translate(Vector3.up * (length / 100));
         GameObject line = Instantiate(branch);
         line.transform.parent = transform;
         line.name = $"Line_{currentLine}";
         line.GetComponent<LineRenderer>().SetPosition(0, initialPosition);
         line.GetComponent<LineRenderer>().SetPosition(1, transform.position);
-        line.GetComponent<LineRenderer>().startWidth = width;
-        line.GetComponent<LineRenderer>().endWidth = width;
+        line.GetComponent<LineRenderer>().startWidth = (width / 100) / (generation * 10);
+        line.GetComponent<LineRenderer>().endWidth = (width / 100) / (generation * 10);
         line.GetComponent<LineRenderer>().material = material;
         lines.Add(line);
         currentLine++;
     }
 
-    private void DrawLines()
+    private void DrawLines(int generation)
     {
         string sentence = lSystem.sentence;
         for (int i = 0; i < sentence.Length; i++)
@@ -106,15 +129,15 @@ public class LSystemGenerator : MonoBehaviour
             switch (sentence[i])
             {
                 case 'F':
-                    Line();
+                    Line(generation);
                     break;
                 case 'X':
                     break;
                 case '+':
-                    transform.Rotate(Vector3.back * (angle + (Random.Range(minAngle, maxAngle) / 100)));
+                    transform.Rotate(Vector3.back * (angle + variation / 10));
                     break;
                 case '-':
-                    transform.Rotate(Vector3.forward * (angle + (Random.Range(minAngle, maxAngle) / 100)));
+                    transform.Rotate(Vector3.forward * (angle + variation / 10));
                     break;
                 case '*':
                     transform.Rotate(Vector3.up * 120);

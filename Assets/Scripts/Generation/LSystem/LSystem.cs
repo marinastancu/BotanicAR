@@ -7,7 +7,7 @@ using UnityEngine;
 public class LSystem
 {
     [SerializeField]
-    public string sentence;
+    public string sentence = "X";
     public string originalSentence;
 
     [SerializeField]
@@ -22,6 +22,7 @@ public class LSystem
     {
         get { return sentence; }
     }
+
     public void SaveOriginalSentence()
     {
         if (string.IsNullOrEmpty(originalSentence))
@@ -29,26 +30,22 @@ public class LSystem
             originalSentence = sentence;
         }
     }
+
     public void RestoreToOriginalSentence()
     {
         sentence = originalSentence;
     }
 
-    public void Generate(int generations)
+    public void Generate()
     {
         var dict = rules.ToDictionary(x => x.ruleCharacter, x => x.ruleReplacement);
 
         StringBuilder iteration = new StringBuilder();
 
-        for (int i = 0; i < generations; i++)
+        foreach (char c in sentence)
         {
-            foreach (char c in sentence)
-            {
-                iteration.Append(dict.ContainsKey(c) ? dict[c] : c.ToString());
-            }
-            sentence = iteration.ToString();
-            iteration = new StringBuilder();
+            iteration.Append(dict.ContainsKey(c) ? dict[c] : c.ToString());
         }
-        Debug.Log(sentence);
+        sentence = iteration.ToString();
     }
 }

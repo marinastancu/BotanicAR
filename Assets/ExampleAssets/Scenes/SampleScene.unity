@@ -386,8 +386,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placeablePrefabs:
-  - {fileID: 664686210305026106, guid: 962158e86cb757d488d4c408b81be8cb, type: 3}
-  - {fileID: 181017140827923556, guid: 61cb001e6bc145c4081a8ecffc7ca167, type: 3}
+  - {fileID: 5868775365077677911, guid: 3b04e06bd22ed304b82bdf64fc19752d, type: 3}
+  - {fileID: 3751651070657423206, guid: ec91ed1dad689f34b808b4311e2c066a, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,63 +482,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1817924904
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1817924906}
-  - component: {fileID: 1817924907}
-  m_Layer: 0
-  m_Name: LSystemTurtle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1817924906
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817924904}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.884514, y: 10.25161, z: -171.8321}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1817924907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817924904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88ded33519e15a94f8458f2559f74c02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  branch: {fileID: 9004277843478252703, guid: 09b66a0608b3be94093100db1d2a5e4d, type: 3}
-  material: {fileID: 2100000, guid: baead07c7940ce149b53ed4f94a6dbcd, type: 2}
-  autoUpdate: 0
-  minAngle: -10
-  maxAngle: 10
-  lSystem:
-    sentence: 
-    originalSentence: 
-    rules: []
-  length: 5
-  width: 5
-  angle: 10
-  numberOfGenerations: 1
 --- !u!4 &212175866532230322
 Transform:
   m_ObjectHideFlags: 0
