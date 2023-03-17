@@ -2,28 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 public class LSystemGenerator : MonoBehaviour
 {
+    private Controls controls;
+    private bool initializing = true;
+
     [SerializeField]
     private GameObject branch;
 
     [SerializeField]
     private Material material;
 
-    [SerializeField]
-    [Range(0, 20)]
-    private float seconds = 5.0f;
-
-    private float timer = 0;
-
     // Used for controlling the generation
     public bool autoUpdate;
-
-    [Header("Randomization")]
-    [SerializeField]
-    [Range(-100, 100)]
-    public float variation = 50f;
 
     [Header("Generation")]
     [SerializeField]
@@ -38,7 +31,7 @@ public class LSystemGenerator : MonoBehaviour
     private float width = 1f;
 
     [SerializeField]
-    [Range(-60, 60)]
+    [Range(-360, 360)]
     public float angle = 10f;
 
     [SerializeField]
@@ -50,19 +43,35 @@ public class LSystemGenerator : MonoBehaviour
     private int currentLine = 0;
     private List<GameObject> lines = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
-        Generate(clean: false);
+        controls = new Controls();
+    }
+
+    private void OnEnable()
+    {
+        controls.Player.Tap.performed += Tap;
+        controls.Player.Enable();
+    }
+
+    private void Tap(InputAction.CallbackContext obj)
+    {
+        Generate(clean: true);
+    }
+
+    private void OnDisable()
+    {
+        controls.Player.Tap.performed -= Tap;
     }
 
     private void Update()
     {
-        if (timer >= seconds)
+        if(initializing)
         {
             Generate(clean: true);
-            timer = 0;
+            initializing=false;
         }
-        timer += Time.deltaTime * 1.0f;
+
     }
 
     private void CleanExistingSystem()
@@ -93,10 +102,19 @@ public class LSystemGenerator : MonoBehaviour
             enabled = false;
         }
 
-        variation = Random.Range(-100, 100);
         length = Random.Range(1, 5);
         width = Random.Range(1, 5);
-        angle = Random.Range(-60, 60);
+        angle = Random.Range(-360, 360);
+
+        if(angle >= 0 && angle <= 90)
+        {
+            angle = 90;
+        }
+
+        if (angle <= 0 && angle >= -90)
+        {
+            angle = -90;
+        }
 
         for (int i = 0; i < numberOfGenerations; i++)
         {
@@ -134,10 +152,10 @@ public class LSystemGenerator : MonoBehaviour
                 case 'X':
                     break;
                 case '+':
-                    transform.Rotate(Vector3.back * (angle + variation / 10));
+                    transform.Rotate(Vector3.back * (angle / 10));
                     break;
                 case '-':
-                    transform.Rotate(Vector3.forward * (angle + variation / 10));
+                    transform.Rotate(Vector3.forward * (angle / 10));
                     break;
                 case '*':
                     transform.Rotate(Vector3.up * 120);
