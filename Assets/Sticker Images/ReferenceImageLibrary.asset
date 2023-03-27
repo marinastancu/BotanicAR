@@ -21,9 +21,9 @@ MonoBehaviour:
       m_GuidLow: 5153363158300929233
       m_GuidHigh: 18296479986698462863
     m_SerializedTextureGuid:
-      m_GuidLow: 15430506322371383136
-      m_GuidHigh: 7039557631559468571
-    m_Size: {x: 0.1, y: 0.05625798}
+      m_GuidLow: 14849697754201675492
+      m_GuidHigh: 6541423791133158459
+    m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
     m_Name: LSystemTurtle
     m_Texture: {fileID: 0}
@@ -31,9 +31,9 @@ MonoBehaviour:
       m_GuidLow: 5468923229853839271
       m_GuidHigh: 11008924427467395235
     m_SerializedTextureGuid:
-      m_GuidLow: 13039093169388802145
-      m_GuidHigh: 3283145410385623274
-    m_Size: {x: 0.1, y: 0.10011124}
+      m_GuidLow: 10418152751215366925
+      m_GuidHigh: 18071667064460258201
+    m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
     m_Name: LSystemTurtle
     m_Texture: {fileID: 0}

@@ -44,20 +44,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ded33519e15a94f8458f2559f74c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 2060937202728427115, guid: 884c6a0fca0e50c46892d48cef8cb3f6, type: 3}
   branch: {fileID: 9004277843478252703, guid: 09b66a0608b3be94093100db1d2a5e4d, type: 3}
   material: {fileID: 2100000, guid: baead07c7940ce149b53ed4f94a6dbcd, type: 2}
-  seconds: 5
   autoUpdate: 0
-  variation: 50
   lSystem:
-    sentence: X
-    originalSentence: 
+    sentence: '[F[-X+F[+FX]][*-X+F[+FX]][/-X+F[+FX]-X]]'
+    originalSentence: X
     rules:
     - ruleCharacter: 70
       ruleReplacement: FF
     - ruleCharacter: 88
       ruleReplacement: '[F[-X+F[+FX]][*-X+F[+FX]][/-X+F[+FX]-X]]'
-  length: 1
+  length: 3
   width: 1
-  angle: 10
+  angle: 90
   numberOfGenerations: 4

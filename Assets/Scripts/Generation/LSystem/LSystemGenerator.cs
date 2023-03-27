@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class LSystemGenerator : MonoBehaviour
 {
+    public Camera camera;
     private Controls controls;
     private bool initializing = true;
 
@@ -42,6 +43,7 @@ public class LSystemGenerator : MonoBehaviour
     private Vector3 initialPosition = Vector3.zero;
     private int currentLine = 0;
     private List<GameObject> lines = new List<GameObject>();
+    private List<GameObject> meshes = new List<GameObject>();
 
     private void Awake()
     {
@@ -66,10 +68,10 @@ public class LSystemGenerator : MonoBehaviour
 
     private void Update()
     {
-        if(initializing)
+        if (initializing)
         {
             Generate(clean: true);
-            initializing=false;
+            initializing = false;
         }
 
     }
@@ -81,6 +83,10 @@ public class LSystemGenerator : MonoBehaviour
         foreach (GameObject line in lines)
         {
             DestroyImmediate(line, true);
+        }
+        foreach (GameObject mesh in meshes)
+        {
+            DestroyImmediate(mesh, true);
         }
         currentLine = 0;
     }
@@ -106,7 +112,7 @@ public class LSystemGenerator : MonoBehaviour
         width = Random.Range(1, 5);
         angle = Random.Range(-360, 360);
 
-        if(angle >= 0 && angle <= 90)
+        if (angle >= 0 && angle <= 90)
         {
             angle = 90;
         }
@@ -136,7 +142,30 @@ public class LSystemGenerator : MonoBehaviour
         line.GetComponent<LineRenderer>().endWidth = (width / 50) / (generation * 10);
         line.GetComponent<LineRenderer>().material = material;
         lines.Add(line);
+        GenerateMesh(line, currentLine);
+        line.GetComponent<LineRenderer>().enabled = false;
         currentLine++;
+
+        //GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        //cylinder.transform.localScale = new Vector3(0.001f, 0.01f, 0.001f);
+        //cylinder.transform.position = line.GetComponent<LineRenderer>().GetPosition(1);
+        //Debug.Log(Quaternion.Euler(line.GetComponent<LineRenderer>().GetPosition(0)));
+        //cylinder.transform.rotation = Quaternion.Euler((line.GetComponent<LineRenderer>().GetPosition(0)) * 1000);
+    }
+
+    private void GenerateMesh(GameObject line, int currentLine)
+    {
+        GameObject meshObject = new GameObject($"Mesh_{currentLine}", typeof(MeshRenderer), typeof(MeshFilter));
+
+        Renderer renderer = meshObject.GetComponent<Renderer>();
+        renderer.sharedMaterial = line.GetComponent<LineRenderer>().sharedMaterial;
+
+        MeshFilter meshFilter = meshObject.GetComponent<MeshFilter>();
+        Mesh mesh = new Mesh();
+        mesh.name = $"Mesh_{currentLine}";
+        line.GetComponent<LineRenderer>().BakeMesh(mesh, camera, true);
+        meshFilter.mesh = mesh;
+        meshes.Add(meshObject);
     }
 
     private void DrawLines(int generation)
