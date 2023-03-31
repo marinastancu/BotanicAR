@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
+using UnityEditor.UnityLinker;
 
 public class LSystemGenerator : MonoBehaviour
 {
     public Camera camera;
-    private Controls controls;
+
     private bool initializing = true;
 
     [SerializeField]
@@ -28,7 +30,7 @@ public class LSystemGenerator : MonoBehaviour
     private float length = 1f;
 
     [SerializeField]
-    [Range(1, 50)]
+    [Range(1, 5)]
     private float width = 1f;
 
     [SerializeField]
@@ -45,27 +47,6 @@ public class LSystemGenerator : MonoBehaviour
     private List<GameObject> lines = new List<GameObject>();
     private List<GameObject> meshes = new List<GameObject>();
 
-    private void Awake()
-    {
-        controls = new Controls();
-    }
-
-    private void OnEnable()
-    {
-        controls.Player.Tap.performed += Tap;
-        controls.Player.Enable();
-    }
-
-    private void Tap(InputAction.CallbackContext obj)
-    {
-        Generate(clean: true);
-    }
-
-    private void OnDisable()
-    {
-        controls.Player.Tap.performed -= Tap;
-    }
-
     private void Update()
     {
         if (initializing)
@@ -73,7 +54,6 @@ public class LSystemGenerator : MonoBehaviour
             Generate(clean: true);
             initializing = false;
         }
-
     }
 
     private void CleanExistingSystem()
@@ -82,11 +62,11 @@ public class LSystemGenerator : MonoBehaviour
         stack.Clear();
         foreach (GameObject line in lines)
         {
-            DestroyImmediate(line, true);
+            DestroyImmediate(line);
         }
         foreach (GameObject mesh in meshes)
         {
-            DestroyImmediate(mesh, true);
+            DestroyImmediate(mesh);
         }
         currentLine = 0;
     }
@@ -127,36 +107,34 @@ public class LSystemGenerator : MonoBehaviour
             lSystem.Generate();
             DrawLines(i + 1);
         }
+
+        MeshHelper.CombineMeshes(gameObject);
+
+        CleanExistingSystem();
     }
 
     private void Line(int generation)
     {
         initialPosition = transform.position;
-        transform.Translate(Vector3.up * (length / 500));
+        transform.Translate(Vector3.up * length);
         GameObject line = Instantiate(branch);
         line.transform.parent = transform;
         line.name = $"Line_{currentLine}";
         line.GetComponent<LineRenderer>().SetPosition(0, initialPosition);
         line.GetComponent<LineRenderer>().SetPosition(1, transform.position);
-        line.GetComponent<LineRenderer>().startWidth = (width / 50) / (generation * 10);
-        line.GetComponent<LineRenderer>().endWidth = (width / 50) / (generation * 10);
+        line.GetComponent<LineRenderer>().startWidth = width / generation;
+        line.GetComponent<LineRenderer>().endWidth = width / generation;
         line.GetComponent<LineRenderer>().material = material;
         lines.Add(line);
         GenerateMesh(line, currentLine);
         line.GetComponent<LineRenderer>().enabled = false;
         currentLine++;
-
-        //GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        //cylinder.transform.localScale = new Vector3(0.001f, 0.01f, 0.001f);
-        //cylinder.transform.position = line.GetComponent<LineRenderer>().GetPosition(1);
-        //Debug.Log(Quaternion.Euler(line.GetComponent<LineRenderer>().GetPosition(0)));
-        //cylinder.transform.rotation = Quaternion.Euler((line.GetComponent<LineRenderer>().GetPosition(0)) * 1000);
     }
 
     private void GenerateMesh(GameObject line, int currentLine)
     {
         GameObject meshObject = new GameObject($"Mesh_{currentLine}", typeof(MeshRenderer), typeof(MeshFilter));
-
+        meshObject.transform.SetParent(transform, false);
         Renderer renderer = meshObject.GetComponent<Renderer>();
         renderer.sharedMaterial = line.GetComponent<LineRenderer>().sharedMaterial;
 
@@ -165,6 +143,46 @@ public class LSystemGenerator : MonoBehaviour
         mesh.name = $"Mesh_{currentLine}";
         line.GetComponent<LineRenderer>().BakeMesh(mesh, camera, true);
         meshFilter.mesh = mesh;
+        Vector3[] vertices;
+        vertices = mesh.vertices;
+
+        Vector3[] verticesNew = {
+            vertices[0],
+            vertices[1],
+            vertices[2],
+            vertices[3],
+            new Vector3 (vertices[3].x, vertices[3].y,  vertices[3].z - 1f),
+            new Vector3 (vertices[2].x, vertices[2].y,  vertices[2].z - 1f),
+            new Vector3 (vertices[1].x, vertices[1].y,  vertices[1].z - 1f),
+            new Vector3 (vertices[0].x, vertices[0].y,  vertices[0].z - 1f),
+        };
+        //Debug.Log("start");
+        //foreach (Vector3 v in vertices)
+        //{
+
+        //    Debug.Log(v);
+        //}
+        int[] triangles = {
+            0, 2, 1, //face front
+	        0, 3, 2,
+            2, 3, 4, //face top
+	        2, 4, 5,
+            1, 2, 5, //face right
+	        1, 5, 6,
+            0, 7, 4, //face left
+	        0, 4, 3,
+            7, 4, 5, //face back
+	        7, 6,4,
+            0, 6, 7, //face bottom
+	        0, 1, 6
+        };
+        mesh.Clear();
+        mesh.vertices = verticesNew;
+        mesh.triangles = triangles;
+        mesh.Optimize();
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
         meshes.Add(meshObject);
     }
 
