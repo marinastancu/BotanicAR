@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
 [RequireComponent(typeof(ARTrackedImageManager))]
-public class ObjectSpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] placeablePrefabs;

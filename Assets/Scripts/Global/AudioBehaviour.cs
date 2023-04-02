@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AudioBehaviour : MonoBehaviour
+public class MaterialAudioBehaviour : MonoBehaviour
 {
     public AudioDetector detector;
 
