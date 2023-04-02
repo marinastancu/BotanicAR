@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
-using UnityEditor.UnityLinker;
 
 public class LSystemGenerator : MonoBehaviour
 {
