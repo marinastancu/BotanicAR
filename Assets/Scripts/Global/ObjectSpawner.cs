@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
 [RequireComponent(typeof(ARTrackedImageManager))]
-public class Spawner : MonoBehaviour
+public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] placeablePrefabs;
@@ -53,5 +53,11 @@ public class Spawner : MonoBehaviour
         GameObject prefab = spawnedPrefabs[name];
         prefab.transform.position = position;
         prefab.SetActive(true);
+        AnchorContent(position, prefab);
+    }
+
+    void AnchorContent(Vector3 position, GameObject content)
+    {
+        content.AddComponent<ARAnchor>();
     }
 }

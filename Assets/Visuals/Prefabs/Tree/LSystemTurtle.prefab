@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2192836067126233562}
   - component: {fileID: 7581603158709185144}
   - component: {fileID: 5324427403464053510}
-  - component: {fileID: 8740882394234716349}
+  - component: {fileID: 4436595622156292553}
   m_Layer: 0
   m_Name: LSystemTurtle
   m_TagString: Untagged
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3751651070657423206}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4620885882412502173}
@@ -114,7 +114,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8740882394234716349
+--- !u!114 &4436595622156292553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 5310998052131934487}
-  loudnessSensitivity: 100
+  loudnessSensitivity: 50
   threshold: 0.1
 --- !u!1 &4886951168113373290
 GameObject:

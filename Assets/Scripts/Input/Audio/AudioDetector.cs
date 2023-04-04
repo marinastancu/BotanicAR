@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -5,16 +7,15 @@ public class AudioDetector : MonoBehaviour
 {
     public int sampleWindow = 64;
     private AudioClip microphoneClip;
-    public void Start()
+
+    async void Start()
     {
-        if(!Permission.HasUserAuthorizedPermission(Permission.Microphone))
+        if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
         {
-            Permission.RequestUserPermission(Permission.Microphone);
+            await Task.Run(() => Permission.RequestUserPermission(Permission.Microphone));
         }
-        else
-        {
-            MicrophoneToAudioClip();
-        }
+
+        MicrophoneToAudioClip();
     }
 
     public void MicrophoneToAudioClip()

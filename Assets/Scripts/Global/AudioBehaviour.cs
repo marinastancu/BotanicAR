@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class MaterialAudioBehaviour : MonoBehaviour
+public class AudioBehaviour : MonoBehaviour
 {
     public AudioDetector detector;
 
-    public float loudnessSensitivity = 0.1f;
+    public float loudnessSensitivity = 50f;
     public float threshold = 0.1f;
     private Renderer renderer;
     public void Start()
@@ -17,9 +17,9 @@ public class MaterialAudioBehaviour : MonoBehaviour
 
         if (loudness > threshold)
         {
-            Color previousColor = renderer.material.color;
+            Color previousColor = renderer.sharedMaterial.color;
             Color newColor = Color.Lerp(previousColor, Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f), Mathf.PingPong(Time.time, 1));
-            renderer.material.color = newColor;
+            renderer.sharedMaterial.color = newColor;
         }
     }
 }
