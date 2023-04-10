@@ -27,7 +27,7 @@ MonoBehaviour:
       m_GuidHigh: 8649152604505112680
     m_Size: {x: 0.1, y: 0.100684345}
     m_SpecifySize: 1
-    m_Name: LSystemTurtle
+    m_Name: sticker1
     m_Texture: {fileID: 0}
   - m_SerializedGuid:
       m_GuidLow: 5118323763314415913
@@ -37,5 +37,5 @@ MonoBehaviour:
       m_GuidHigh: 6566958771205494458
     m_Size: {x: 0.1, y: 0.101910464}
     m_SpecifySize: 1
-    m_Name: LSystemTurtle
+    m_Name: sticker2
     m_Texture: {fileID: 0}

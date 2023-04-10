@@ -7,6 +7,7 @@ public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] placeablePrefabs;
+    public string[] names = null;
 
     private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
     private ARTrackedImageManager trackedImageManager;
@@ -14,11 +15,17 @@ public class ObjectSpawner : MonoBehaviour
     private void Awake()
     {
         trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
-        foreach (GameObject prefab in placeablePrefabs)
+        if( names != null)
         {
-            GameObject newPrefab = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            newPrefab.name = prefab.name;
-            spawnedPrefabs.Add(prefab.name, newPrefab);
+            foreach (GameObject prefab in placeablePrefabs)
+            {
+                foreach (string name in names)
+                {
+                    GameObject newPrefab = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                    newPrefab.name = name;
+                    spawnedPrefabs.Add(name, newPrefab);
+                }
+            }
         }
     }
     private void OnEnable()
@@ -49,15 +56,11 @@ public class ObjectSpawner : MonoBehaviour
     {
         string name = trackedImage.referenceImage.name;
         Vector3 position = trackedImage.transform.position;
+        Quaternion rotation = trackedImage.transform.rotation;
 
         GameObject prefab = spawnedPrefabs[name];
         prefab.transform.position = position;
+        prefab.transform.rotation = rotation;
         prefab.SetActive(true);
-        AnchorContent(position, prefab);
-    }
-
-    void AnchorContent(Vector3 position, GameObject content)
-    {
-        content.AddComponent<ARAnchor>();
     }
 }
